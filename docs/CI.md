@@ -22,7 +22,8 @@ Workflow: [.github/workflows/ci.yml](../.github/workflows/ci.yml).
 continue-on-error и подавления exit code нет; для job установлен timeout 15 минут.
 GitHub Secrets не используются, .env не создаётся и не выводится,
 содержимое окружения и заголовки не печатаются. Фиктивные credentials задают
-только существующие test fixtures. Бизнес-логика, pytest и Ruff не менялись.
+только существующие test fixtures. Бизнес-логика и Ruff не менялись. Для pytest задан pythonpath = ["."],
+чтобы команда pytest находила локальный модуль scripts при обычной установке.
 
 Версии Actions сверены с официальными latest releases 21 октября 2026 года:
 
@@ -45,3 +46,7 @@ GitHub Secrets не используются, .env не создаётся и н
 
 Commit и push при локальной настройке не выполнялись. Удалённый запуск
 нельзя считать успешным до подтверждения в GitHub Actions.
+
+Первый запуск CI выявил ModuleNotFoundError: scripts при сборе тестов командой
+pytest. В pyproject.toml добавлен pythonpath = ["."]. Это обеспечивает одинаковую
+доступность корня проекта для pytest и python -m pytest, не меняя бизнес-логику.
