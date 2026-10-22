@@ -137,3 +137,31 @@ Unit-тесты используют httpx.MockTransport и не выполня�
 Проверяются OAuth, структура запросов, конфигурация, кеш/обновление токена,
 повторы, таймауты, ошибки HTTP/JSON, пустой ответ, разделение промптов,
 проверка TLS, закрытие HTTP-клиента и отсутствие секретов в логах/traceback.
+
+## Выбор модели и HTTP 404 на этапе completion
+
+В справке POST chat/completions ответ 404 описан как неверный идентификатор
+модели. Успешный OAuth не подтверждает доступ к выбранной модели.
+Проверяйте одновременно URL, идентификатор модели и режим аккаунта.
+
+По официальной документации, проверенной 21 октября 2026 года:
+
+- Freemium для физических лиц: `GIGACHAT_MODEL=GigaChat-3-Ultra`.
+- Платные пакеты: семейство `GigaChat-2`, `GigaChat-2-Pro`,
+  `GigaChat-2-Max`; доступ зависит от пакета.
+- `GigaChat-3-Ultra` не является универсальным выбором для платного доступа.
+- Идентификатор из defaults или старого примера не гарантирует доступ:
+  задайте GIGACHAT_MODEL явно.
+- Для точной проверки доступности предусмотрен
+  [GET /models](https://developers.sber.ru/docs/ru/gigachat/api/reference/rest/get-models)
+  с Bearer-токеном. Не публикуйте этот токен и заголовки запроса.
+
+Изменяйте только GIGACHAT_MODEL в локальном .env; переменная окружения
+GIGACHAT_MODEL, если она установлена, имеет приоритет. Повторите ручную
+проверку после выбора модели. Пока не получены `GigaChat integration OK.`
+и ответ модели, интеграцию нельзя отмечать проверенной.
+
+Источники:
+[выбор модели](https://developers.sber.ru/docs/ru/gigachat/guides/selecting-a-model),
+[GigaChat 3 Ultra](https://developers.sber.ru/docs/ru/gigachat/models/gigachat-3-ultra),
+[значение HTTP 404](https://developers.sber.ru/docs/ru/gigachat/api/reference/rest/post-chat).

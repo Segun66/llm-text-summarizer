@@ -44,8 +44,12 @@ GitHub Secrets не используются, .env не создаётся и н
 репозитория. Workflow не содержит workflow_dispatch: ручная кнопка Run workflow
 не предусмотрена. Для проверки используется push/PR.
 
-Commit и push при локальной настройке не выполнялись. Удалённый запуск
-нельзя считать успешным до подтверждения в GitHub Actions.
+21 октября 2026 года GitHub API подтвердил успешный запуск
+[39624255439](https://github.com/Segun66/llm-text-summarizer/actions/runs/39624255439)
+для коммита 39cfe1a. Ветки main и feature/llm-summarizer существуют;
+основной веткой пока остаётся feature/llm-summarizer. PR ещё не создан.
+Локальные изменения итогового аудита не опубликованы и этим CI не проверены.
+Commit, push и создание PR в ходе аудита не выполнялись.
 
 Первый запуск CI выявил ModuleNotFoundError: scripts при сборе тестов командой
 pytest. В pyproject.toml добавлен pythonpath = ["."]. Это обеспечивает одинаковую
