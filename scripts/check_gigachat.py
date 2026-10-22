@@ -10,6 +10,7 @@ from app.config.settings import Settings
 from app.llm.factory import open_gigachat
 from app.utils.errors import (
     InvalidProviderResponse,
+    LLMServiceError,
     ProviderAuthenticationError,
     ProviderRejectedRequest,
     ProviderTimeout,
@@ -52,6 +53,18 @@ def main() -> int:
         return 1
     except InvalidProviderResponse:
         print("GigaChat returned an invalid, empty or incomplete response.")
+        return 1
+    except LLMServiceError as error:
+        # Only controlled metadata; never print the provider body, URL or raw exception.
+        operation = error.operation if error.operation in {"oauth", "completion"} else "unknown"
+        status = error.status_code
+        status_label = (
+            f"HTTP {status}"
+            if type(status) is int and 100 <= status <= 599
+            else "HTTP status unavailable"
+        )
+        print(f"GigaChat request failed: stage={operation}, {status_label}.")
+        print("Check endpoint URLs and model availability; redirects are not followed.")
         return 1
     except (KeyboardInterrupt, EOFError):
         print("Cancelled.")

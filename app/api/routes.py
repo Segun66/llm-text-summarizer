@@ -29,7 +29,10 @@ async def health() -> HealthResponse:
     responses={
         422: {"model": ErrorResponse | ValidationErrorResponse},
         502: {"model": ErrorResponse},
-        503: {"model": SummarizeResponse, "description": "Model unavailable; fallback returned"},
+        503: {
+            "model": SummarizeResponse | ErrorResponse,
+            "description": "Model unavailable; fallback or dependency error returned",
+        },
     },
 )
 async def summarize(

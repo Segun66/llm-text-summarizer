@@ -79,7 +79,11 @@ class GigaChatClient:
         if status in {400, 413, 422}:
             raise LLMRequestError("Provider rejected the input")
         if not response.is_success:
-            raise LLMServiceError("Provider rejected the operation")
+            raise LLMServiceError(
+                "Provider rejected the operation",
+                status_code=status,
+                operation="oauth" if oauth else "completion",
+            )
         return response
 
     @staticmethod
